@@ -1,0 +1,29 @@
+{
+  "name": "graph-recommendation-engine",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.config.ts",
+    "build": "tsc -p tsconfig.json && vite build --config vite.config.ts",
+    "preview": "vite preview --config vite.config.ts",
+    "run:engine": "tsx src/main.ts",
+    "run:benchmarks": "tsx src/main.ts --benchmarks",
+    "run:experiments": "tsx src/main.ts --experiments",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.12.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.15",
+    "@types/react": "^18.3.4",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "tsx": "^4.16.5",
+    "typescript": "^5.5.4",
+    "vite": "^5.3.5"
+  }
+}

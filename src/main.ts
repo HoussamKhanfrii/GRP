@@ -45,6 +45,12 @@ interface DashboardExport {
     memoryMB: number;
   };
   recommendations: DashboardRecommendationSet[];
+  benchmarkResults: any[];
+  graphSizeExperiment: any[];
+  sparsityExperiment: any[];
+  depthExperiment: any[];
+  degreeDistribution: Record<string, number>;
+  popularItems: { itemId: string; degree: number; weightSum: number }[];
 }
 
 const generatorConfig = {
@@ -72,7 +78,7 @@ const propagationConfig: PropagationConfig = {
   restartProbability: 0.15,
   maxIterations: 30,
   convergenceThreshold: 1e-6,
-  minActivation: 0.001,
+  minActivation: 1e-6,
   weightExponent: 1.5
 };
 
@@ -95,24 +101,6 @@ for (const method of methods) {
 }
 
 const memoryAfterSample = MemoryProfiler.snapshot("after_sample");
-
-if (exportDashboard) {
-  const dashboardTopK = 10;
-  const dashboardData = buildDashboardExport(
-    analysis,
-    memoryAfterGraph.heapUsedMB,
-    graph.getAllUsers(),
-    methods,
-    engine,
-    propagationConfig,
-    dashboardTopK
-  );
-
-  const dashboardOutputPath = path.resolve("dashboard", "public", "engine-output.json");
-  fs.mkdirSync(path.dirname(dashboardOutputPath), { recursive: true });
-  fs.writeFileSync(dashboardOutputPath, JSON.stringify(dashboardData, null, 2), "utf-8");
-  console.log("Dashboard data saved to dashboard/public/engine-output.json");
-}
 
 if (runBenchmarks) {
   const benchmarkResults = BenchmarkRunner.run(graph, split.train, split.test, {
@@ -209,6 +197,24 @@ CsvWriter.writeCsv(
 
 console.log("Memory profile saved to results/memory_results.csv");
 
+if (exportDashboard) {
+  const dashboardTopK = 10;
+  const dashboardData = buildDashboardExport(
+    analysis,
+    memoryAfterGraph.heapUsedMB,
+    graph.getAllUsers(),
+    methods,
+    engine,
+    propagationConfig,
+    dashboardTopK
+  );
+
+  const dashboardOutputPath = path.resolve("dashboard", "public", "engine-output.json");
+  fs.mkdirSync(path.dirname(dashboardOutputPath), { recursive: true });
+  fs.writeFileSync(dashboardOutputPath, JSON.stringify(dashboardData, null, 2), "utf-8");
+  console.log("Dashboard data saved to dashboard/public/engine-output.json");
+}
+
 function buildDashboardExport(
   analysis: GraphAnalysis,
   memoryMB: number,
@@ -251,6 +257,69 @@ function buildDashboardExport(
       averageDegree: analysis.averageDegree,
       memoryMB
     },
-    recommendations
+    recommendations,
+    benchmarkResults: readCsv(path.join("results", "benchmark_results.csv")).map((r: any) => ({
+      method: r.method,
+      precision: r.precision_at_k ?? 0,
+      recall: r.recall_at_k ?? 0,
+      ndcg: r.ndcg_at_k ?? 0,
+      runtimeMs: r.avg_runtime_ms ?? 0,
+      memoryMB: r.avg_memory_mb ?? 0,
+      visitedNodes: r.avg_visited_nodes ?? 0,
+      candidateCount: r.avg_candidate_count ?? 0
+    })),
+    graphSizeExperiment: readCsv(path.join("results", "experiment_graph_size.csv")).map((r: any) => ({
+      users: r.users ?? 0,
+      items: r.items ?? 0,
+      interactions: r.interactions ?? 0,
+      latencyMs: r.latency_ms ?? 0,
+      memoryMB: r.run_memory_mb ?? 0,
+      rankingMs: r.ranking_ms ?? 0
+    })),
+    sparsityExperiment: readCsv(path.join("results", "experiment_sparsity.csv")).map((r: any, idx: number) => ({
+      label: ["very sparse", "sparse", "medium", "dense"][idx] || `Level ${idx}`,
+      density: r.density ?? 0,
+      precision: r.precision_at_k ?? 0,
+      recall: r.recall_at_k ?? 0,
+      coverage: r.coverage ?? 0,
+      candidateCount: r.candidate_count ?? 0
+    })),
+    depthExperiment: readCsv(path.join("results", "experiment_depth.csv")).map((r: any) => ({
+      depth: r.depth ?? 0,
+      precision: r.precision_at_k ?? 0,
+      recall: r.recall_at_k ?? 0,
+      runtimeMs: r.runtime_ms ?? 0,
+      visitedNodes: r.visited_nodes ?? 0,
+      candidateCount: r.candidate_count ?? 0
+    })),
+    degreeDistribution: analysis.degreeDistribution,
+    popularItems: analysis.topItems.map(p => ({
+      itemId: p.itemId,
+      degree: p.degree,
+      weightSum: p.weightSum
+    }))
   };
+}
+
+function readCsv(filePath: string): any[] {
+  if (!fs.existsSync(filePath)) return [];
+  const content = fs.readFileSync(filePath, "utf-8").trim();
+  if (!content) return [];
+  const lines = content.split('\n').filter(line => line.trim() !== '');
+  if (lines.length === 0) return [];
+  const headers = lines[0].split(',').map(h => h.trim());
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const values = lines[i].split(',');
+    const obj: any = {};
+    for (let j = 0; j < headers.length; j++) {
+      let val: any = values[j] ? values[j].trim() : '';
+      if (val !== '' && !isNaN(Number(val))) {
+        val = Number(val);
+      }
+      obj[headers[j]] = val;
+    }
+    rows.push(obj);
+  }
+  return rows;
 }

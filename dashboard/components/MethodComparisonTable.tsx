@@ -1,3 +1,5 @@
+import { methodLabels } from "../utils/displayLabels";
+
 interface MethodRow {
   method: string;
   precision: number;
@@ -14,14 +16,14 @@ interface MethodComparisonTableProps {
 export function MethodComparisonTable({ rows }: MethodComparisonTableProps): JSX.Element {
   return (
     <div className="card table-card">
-      <div className="card-title">Method Comparison</div>
+      <div className="card-title">Propagation Method Comparison</div>
       <table className="data-table">
         <thead>
           <tr>
             <th>Method</th>
-            <th>Precision</th>
-            <th>Recall</th>
-            <th>NDCG</th>
+            <th>Precision@10</th>
+            <th>Recall@10</th>
+            <th>NDCG@10</th>
             <th>Runtime (ms)</th>
             <th>Memory (MB)</th>
           </tr>
@@ -29,7 +31,7 @@ export function MethodComparisonTable({ rows }: MethodComparisonTableProps): JSX
         <tbody>
           {rows.map((row) => (
             <tr key={row.method}>
-              <td>{row.method}</td>
+              <td style={{ whiteSpace: "nowrap" }}>{methodLabels[row.method] || row.method}</td>
               <td>{row.precision.toFixed(2)}</td>
               <td>{row.recall.toFixed(2)}</td>
               <td>{row.ndcg.toFixed(2)}</td>

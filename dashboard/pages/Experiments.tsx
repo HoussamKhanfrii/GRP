@@ -10,20 +10,29 @@ import {
   Bar
 } from "recharts";
 import { ChartCard } from "../components/ChartCard";
-import { depthExperiment, graphSizeExperiment, sparsityExperiment } from "../data/sampleData";
+import { useEngineData } from "../EngineContext";
 
 export function Experiments(): JSX.Element {
+  const { depthExperiment, graphSizeExperiment, sparsityExperiment } = useEngineData();
+
   return (
     <div className="page">
       <div className="page-header">
         <div>
           <h1>Experiments</h1>
-          <p>Controlled runs across graph size, sparsity, and depth.</p>
+          <p>Controlled experiments across graph size, sparsity, degree imbalance, and propagation depth.</p>
+        </div>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <div className="page-badge" style={{ background: "#4caf50", color: "#fff" }}>Generated Benchmark Results</div>
         </div>
       </div>
 
+      <p className="description-text">
+        This page compares propagation strategies under controlled changes in graph size, sparsity, degree imbalance, and propagation depth.
+      </p>
+
       <div className="grid-two">
-        <ChartCard title="Depth vs Candidate Count">
+        <ChartCard title="Propagation Depth vs Candidate Count">
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={depthExperiment}>
               <CartesianGrid strokeDasharray="3 3" stroke="#d9d1c3" />
@@ -35,7 +44,7 @@ export function Experiments(): JSX.Element {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Sparsity vs Recall">
+        <ChartCard title="Graph Sparsity vs Recall@10">
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={sparsityExperiment}>
               <CartesianGrid strokeDasharray="3 3" stroke="#d9d1c3" />
@@ -48,7 +57,7 @@ export function Experiments(): JSX.Element {
         </ChartCard>
       </div>
 
-      <ChartCard title="Scale vs Memory">
+      <ChartCard title="Graph Scale vs Memory Usage">
         <ResponsiveContainer width="100%" height={280}>
           <LineChart data={graphSizeExperiment}>
             <CartesianGrid strokeDasharray="3 3" stroke="#d9d1c3" />

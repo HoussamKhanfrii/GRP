@@ -2,9 +2,10 @@ import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianG
 import { MetricCard } from "../components/MetricCard";
 import { ChartCard } from "../components/ChartCard";
 import { MethodComparisonTable } from "../components/MethodComparisonTable";
-import { graphStats, benchmarkResults, graphSizeExperiment } from "../data/sampleData";
+import { useEngineData } from "../EngineContext";
 
 export function Dashboard(): JSX.Element {
+  const { graphStats, benchmarkResults, graphSizeExperiment } = useEngineData();
   const latestBenchmark = benchmarkResults[0];
 
   return (
@@ -12,26 +13,33 @@ export function Dashboard(): JSX.Element {
       <div className="page-header">
         <div>
           <h1>Propagation Engine Overview</h1>
-          <p>High level health check across the recommendation stack.</p>
+          <p>High-level health check across the recommendation stack.</p>
         </div>
-        <div className="page-badge">Academic Grade</div>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <div className="page-badge">Academic Grade</div>
+          <div className="page-badge" style={{ background: "#4caf50", color: "#fff" }}>Generated Benchmark Results</div>
+        </div>
       </div>
 
       <div className="metric-grid">
-        <MetricCard label="Users" value={graphStats.users} />
-        <MetricCard label="Items" value={graphStats.items} />
-        <MetricCard label="Interactions" value={graphStats.interactions} />
-        <MetricCard label="Density" value={graphStats.density.toFixed(3)} />
-        <MetricCard label="Memory" value={`${graphStats.memoryMB.toFixed(1)} MB`} />
+        <MetricCard label="USERS" value={graphStats.users} />
+        <MetricCard label="ITEMS" value={graphStats.items} />
+        <MetricCard label="INTERACTIONS" value={graphStats.interactions} />
+        <MetricCard label="DENSITY" value={graphStats.density.toFixed(3)} />
+        <MetricCard label="MEMORY USAGE" value={`${graphStats.memoryMB.toFixed(1)} MB`} />
         <MetricCard
-          label="Latest Precision"
+          label="LATEST PRECISION@10"
           value={latestBenchmark.precision.toFixed(2)}
-          subtext="Benchmark snapshot"
+          subtext="Sample benchmark snapshot"
         />
       </div>
 
+      <p className="description-text" style={{ marginBottom: "16px" }}>
+        Displayed values correspond to sample experimental runs.
+      </p>
+
       <div className="grid-two">
-        <ChartCard title="Runtime vs Users">
+        <ChartCard title="Runtime vs Number of Users">
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={graphSizeExperiment}>
               <CartesianGrid strokeDasharray="3 3" stroke="#d9d1c3" />

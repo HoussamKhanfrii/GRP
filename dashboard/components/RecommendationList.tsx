@@ -19,11 +19,11 @@ export function RecommendationList({ items }: RecommendationListProps): JSX.Elem
           {items.map((item) => (
             <li key={item.itemId}>
               <div className="rec-item">
-                <div className="rec-title">{item.itemId}</div>
+                <div className="rec-title">Recommended Item: {item.itemId}</div>
                 <div className="rec-score">Score: {item.score.toFixed(3)}</div>
               </div>
               {item.path ? (
-                <div className="rec-path">{item.path.join(" -> ")}</div>
+                <div className="rec-path">Explanation Path: {item.path.join(" → ")}</div>
               ) : null}
             </li>
           ))}

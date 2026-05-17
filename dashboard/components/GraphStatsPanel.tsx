@@ -25,31 +25,31 @@ export function GraphStatsPanel({ stats, topItems }: GraphStatsPanelProps): JSX.
       <div className="card-title">Graph Summary</div>
       <div className="stats-grid">
         <div>
-          <div className="stat-label">Users</div>
+          <div className="stat-label">USERS</div>
           <div className="stat-value">{stats.users}</div>
         </div>
         <div>
-          <div className="stat-label">Items</div>
+          <div className="stat-label">ITEMS</div>
           <div className="stat-value">{stats.items}</div>
         </div>
         <div>
-          <div className="stat-label">Interactions</div>
+          <div className="stat-label">INTERACTIONS</div>
           <div className="stat-value">{stats.interactions}</div>
         </div>
         <div>
-          <div className="stat-label">Density</div>
+          <div className="stat-label">DENSITY</div>
           <div className="stat-value">{stats.density.toFixed(3)}</div>
         </div>
         <div>
-          <div className="stat-label">Sparsity</div>
+          <div className="stat-label">SPARSITY</div>
           <div className="stat-value">{stats.sparsity.toFixed(3)}</div>
         </div>
         <div>
-          <div className="stat-label">Avg Degree</div>
+          <div className="stat-label">AVERAGE DEGREE</div>
           <div className="stat-value">{stats.averageDegree.toFixed(2)}</div>
         </div>
         <div>
-          <div className="stat-label">Memory</div>
+          <div className="stat-label">MEMORY USAGE</div>
           <div className="stat-value">{stats.memoryMB.toFixed(1)} MB</div>
         </div>
       </div>
@@ -58,7 +58,7 @@ export function GraphStatsPanel({ stats, topItems }: GraphStatsPanelProps): JSX.
         {topItems.map((item) => (
           <li key={item.itemId}>
             <span>{item.itemId}</span>
-            <span>Degree {item.degree}</span>
+            <span>Degree: {item.degree}</span>
           </li>
         ))}
       </ul>

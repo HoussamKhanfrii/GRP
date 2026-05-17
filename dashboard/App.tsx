@@ -3,6 +3,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Recommendations } from "./pages/Recommendations";
 import { Experiments } from "./pages/Experiments";
 import { GraphAnalysis } from "./pages/GraphAnalysis";
+import { methodLabels } from "./utils/displayLabels";
 
 const pages = [
   { key: "dashboard", label: "Dashboard" },
@@ -20,7 +21,7 @@ export default function App(): JSX.Element {
     <div className="app">
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-title">Graph Propagation Lab</div>
+          <div className="brand-title">GRAPH PROPAGATION LAB</div>
           <div className="brand-subtitle">Recommendation Engine</div>
         </div>
         <nav className="nav">
@@ -35,11 +36,11 @@ export default function App(): JSX.Element {
           ))}
         </nav>
         <div className="sidebar-footer">
-          <div>Propagation methods</div>
-          <div className="pill">Neighborhood</div>
-          <div className="pill">Random Walk</div>
-          <div className="pill">Spreading</div>
-          <div className="pill">Weighted Diffusion</div>
+          <div>Propagation Methods</div>
+          <div className="pill">{methodLabels.neighborhood}</div>
+          <div className="pill">{methodLabels.randomWalkRestart}</div>
+          <div className="pill">{methodLabels.spreadingActivation}</div>
+          <div className="pill">{methodLabels.weightedInfluence}</div>
         </div>
       </aside>
 

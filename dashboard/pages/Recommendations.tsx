@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { RecommendationList } from "../components/RecommendationList";
-import { methods, recommendationSets, users } from "../data/sampleData";
+import { methodLabels } from "../utils/displayLabels";
 
 interface EngineRecommendationItem {
   itemId: string;
@@ -31,11 +31,17 @@ interface LiveRecommendationResponse {
   items: EngineRecommendationItem[];
 }
 
+import { useEngineData } from "../EngineContext";
+
 export function Recommendations(): JSX.Element {
-  const [selectedUser, setSelectedUser] = useState(users[0]);
-  const [selectedMethod, setSelectedMethod] = useState(methods[0]);
+  const engineContextData = useEngineData();
+  const users = engineContextData.users;
+  const methods = engineContextData.methods;
+
+  const [selectedUser, setSelectedUser] = useState(users[0] || "");
+  const [selectedMethod, setSelectedMethod] = useState(methods[0] || "");
   const [topK, setTopK] = useState(3);
-  const [engineData, setEngineData] = useState<EngineOutput | null>(null);
+  const [engineData, setEngineData] = useState<EngineOutput | null>(engineContextData);
   const [liveMode, setLiveMode] = useState(false);
   const [liveUsers, setLiveUsers] = useState<string[]>([]);
   const [liveMethods, setLiveMethods] = useState<string[]>([]);
@@ -43,23 +49,8 @@ export function Recommendations(): JSX.Element {
   const [liveStatus, setLiveStatus] = useState<"idle" | "loading" | "error">("idle");
 
   useEffect(() => {
-    let active = true;
-    fetch("/engine-output.json")
-      .then((response) => (response.ok ? response.json() : null))
-      .then((data: EngineOutput | null) => {
-        if (active && data && Array.isArray(data.users)) {
-          setEngineData(data);
-        }
-      })
-      .catch(() => {
-        if (active) {
-          setEngineData(null);
-        }
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
+    setEngineData(engineContextData as EngineOutput);
+  }, [engineContextData]);
 
   useEffect(() => {
     if (!liveMode) {
@@ -126,12 +117,9 @@ export function Recommendations(): JSX.Element {
   }, [liveMode, selectedUser, selectedMethod, topK]);
 
   const fallbackUsers = engineData?.users?.length ? engineData.users : users;
-  const fallbackMethods = engineData?.methods?.length ? engineData.methods : methods;
-  const activeUsers = liveMode && liveUsers.length ? liveUsers : fallbackUsers;
-  const activeMethods = liveMode && liveMethods.length ? liveMethods : fallbackMethods;
-  const activeRecommendations = engineData?.recommendations?.length
-    ? engineData.recommendations
-    : recommendationSets;
+  const activeUsers = liveMode && liveUsers.length ? liveUsers : users;
+  const activeMethods = liveMode && liveMethods.length ? liveMethods : methods;
+  const activeRecommendations = engineData?.recommendations || [];
 
   useEffect(() => {
     if (activeUsers.length > 0 && !activeUsers.includes(selectedUser)) {
@@ -145,28 +133,36 @@ export function Recommendations(): JSX.Element {
     }
   }, [activeMethods, selectedMethod]);
 
+  const useLiveData = liveMode && liveStatus === "idle";
   const current = useMemo(() => {
-    if (liveMode) {
-      return liveItems;
+    if (useLiveData) {
+      return liveItems.slice(0, topK);
     }
     const match = activeRecommendations.find(
       (set) => set.userId === selectedUser && set.method === selectedMethod
     );
     return match ? match.items.slice(0, topK) : [];
-  }, [activeRecommendations, liveItems, liveMode, selectedUser, selectedMethod, topK]);
+  }, [activeRecommendations, liveItems, selectedUser, selectedMethod, topK, useLiveData]);
 
   return (
     <div className="page">
       <div className="page-header">
         <div>
           <h1>Recommendations</h1>
-          <p>Inspect propagation results and explanation paths.</p>
+          <p>Generate Top-K recommendations and inspect graph-based explanation paths.</p>
+        </div>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <div className="page-badge" style={{ background: "#4caf50", color: "#fff" }}>Generated Benchmark Results</div>
         </div>
       </div>
 
+      <p className="description-text">
+        This page generates Top-K recommendations for a selected user using the chosen graph propagation strategy. Each recommendation includes a relevance score and an explanation path showing how the item was inferred through the graph.
+      </p>
+
       <div className="filters">
         <label>
-          User
+          Target User
           <select value={selectedUser} onChange={(event) => setSelectedUser(event.target.value)}>
             {activeUsers.map((user) => (
               <option key={user} value={user}>
@@ -177,18 +173,18 @@ export function Recommendations(): JSX.Element {
         </label>
 
         <label>
-          Method
+          Propagation Method
           <select value={selectedMethod} onChange={(event) => setSelectedMethod(event.target.value)}>
             {activeMethods.map((method) => (
               <option key={method} value={method}>
-                {method}
+                {methodLabels[method] || method}
               </option>
             ))}
           </select>
         </label>
 
         <label>
-          Top K
+          Selected Top-K: {topK}
           <input
             type="range"
             min={1}
@@ -196,11 +192,10 @@ export function Recommendations(): JSX.Element {
             value={topK}
             onChange={(event) => setTopK(Number(event.target.value))}
           />
-          <span className="range-value">{topK}</span>
         </label>
 
         <label className="live-toggle">
-          Live recompute
+          Live Recommendation Update
           <input
             type="checkbox"
             checked={liveMode}
@@ -216,7 +211,7 @@ export function Recommendations(): JSX.Element {
             : liveStatus === "error"
               ? "Live engine unavailable - using cached selection"
               : "Live engine active"
-          : "Static recommendations"}
+          : "Sample Generated Recommendations"}
       </div>
 
       <RecommendationList items={current} />

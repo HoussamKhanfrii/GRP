@@ -79,7 +79,7 @@ export class LiveEngine {
       restartProbability: 0.15,
       maxIterations: 30,
       convergenceThreshold: 1e-6,
-      minActivation: 0.001,
+      minActivation: 1e-6,
       weightExponent: 1.5
     };
     this.graphStats = {

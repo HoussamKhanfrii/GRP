@@ -3,14 +3,36 @@ import { ChartCard } from "../components/ChartCard";
 import { GraphStatsPanel } from "../components/GraphStatsPanel";
 import { useEngineData } from "../EngineContext";
 
+interface DegreeBin {
+  label: string;
+  count: number;
+}
+
+function buildDegreeBins(degreeDistribution: Record<string, number>): DegreeBin[] {
+  const bins = [
+    { label: "0", min: 0, max: 0 },
+    { label: "1", min: 1, max: 1 },
+    { label: "2", min: 2, max: 2 },
+    { label: "3-4", min: 3, max: 4 },
+    { label: "5-8", min: 5, max: 8 },
+    { label: "9-16", min: 9, max: 16 },
+    { label: "17-32", min: 17, max: 32 },
+    { label: "33-64", min: 33, max: 64 },
+    { label: "65+", min: 65, max: Number.POSITIVE_INFINITY }
+  ];
+
+  return bins.map((bin) => {
+    const count = Object.entries(degreeDistribution).reduce((sum, [degree, value]) => {
+      const numericDegree = Number(degree);
+      return numericDegree >= bin.min && numericDegree <= bin.max ? sum + value : sum;
+    }, 0);
+    return { label: bin.label, count };
+  });
+}
+
 export function GraphAnalysis(): JSX.Element {
   const { degreeDistribution, graphStats, popularItems } = useEngineData();
-  
-  // Transform degreeDistribution Record<string, number> to array for Recharts if needed
-  const distArray = Object.entries(degreeDistribution).map(([degree, count]) => ({
-    degree: Number(degree),
-    count
-  })).sort((a, b) => a.degree - b.degree);
+  const distArray = buildDegreeBins(degreeDistribution);
 
   return (
     <div className="page">
@@ -30,11 +52,11 @@ export function GraphAnalysis(): JSX.Element {
 
       <div className="grid-two">
         <GraphStatsPanel stats={graphStats} topItems={popularItems} />
-        <ChartCard title="Degree Distribution">
+        <ChartCard title="Degree Distribution (Binned)">
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={distArray}>
               <CartesianGrid strokeDasharray="3 3" stroke="#d9d1c3" />
-              <XAxis dataKey="degree" />
+              <XAxis dataKey="label" interval={0} />
               <YAxis />
               <Tooltip />
               <Bar dataKey="count" fill="#3b6b4f" />

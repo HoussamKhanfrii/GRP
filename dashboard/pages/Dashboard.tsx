@@ -30,12 +30,12 @@ export function Dashboard(): JSX.Element {
         <MetricCard
           label="LATEST PRECISION@10"
           value={latestBenchmark.precision.toFixed(2)}
-          subtext="Sample benchmark snapshot"
+          subtext="Generated benchmark snapshot."
         />
       </div>
 
       <p className="description-text" style={{ marginBottom: "16px" }}>
-        Displayed values correspond to sample experimental runs.
+        Displayed values are generated from the C engine benchmark run.
       </p>
 
       <div className="grid-two">

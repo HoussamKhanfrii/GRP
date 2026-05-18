@@ -199,6 +199,29 @@ body::before {
   text-align: left;
 }
 
+.method-comparison-table {
+  table-layout: fixed;
+  font-size: 11px;
+}
+
+.method-comparison-table th,
+.method-comparison-table td {
+  padding: 8px 4px;
+  vertical-align: top;
+  line-height: 1.25;
+}
+
+.method-comparison-table th:first-child,
+.method-comparison-table td:first-child {
+  width: 28%;
+}
+
+.method-comparison-table th:not(:first-child),
+.method-comparison-table td:not(:first-child) {
+  text-align: right;
+  width: 14.4%;
+}
+
 .filters {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));

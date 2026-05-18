@@ -211,7 +211,7 @@ export function Recommendations(): JSX.Element {
             : liveStatus === "error"
               ? "Live engine unavailable - using cached selection"
               : "Live engine active"
-          : "Sample Generated Recommendations"}
+          : "Generated Recommendations"}
       </div>
 
       <RecommendationList items={current} />

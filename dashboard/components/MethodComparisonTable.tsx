@@ -17,7 +17,7 @@ export function MethodComparisonTable({ rows }: MethodComparisonTableProps): JSX
   return (
     <div className="card table-card">
       <div className="card-title">Propagation Method Comparison</div>
-      <table className="data-table">
+      <table className="data-table method-comparison-table">
         <thead>
           <tr>
             <th>Method</th>
@@ -31,7 +31,7 @@ export function MethodComparisonTable({ rows }: MethodComparisonTableProps): JSX
         <tbody>
           {rows.map((row) => (
             <tr key={row.method}>
-              <td style={{ whiteSpace: "nowrap" }}>{methodLabels[row.method] || row.method}</td>
+              <td>{methodLabels[row.method] || row.method}</td>
               <td>{row.precision.toFixed(2)}</td>
               <td>{row.recall.toFixed(2)}</td>
               <td>{row.ndcg.toFixed(2)}</td>

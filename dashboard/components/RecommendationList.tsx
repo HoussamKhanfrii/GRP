@@ -20,7 +20,7 @@ export function RecommendationList({ items }: RecommendationListProps): JSX.Elem
             <li key={item.itemId}>
               <div className="rec-item">
                 <div className="rec-title">Recommended Item: {item.itemId}</div>
-                <div className="rec-score">Score: {item.score.toFixed(3)}</div>
+                <div className="rec-score">Raw Propagation Score: {item.score.toFixed(3)}</div>
               </div>
               {item.path ? (
                 <div className="rec-path">Explanation Path: {item.path.join(" → ")}</div>

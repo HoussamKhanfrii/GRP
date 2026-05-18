@@ -10,6 +10,9 @@
     "run:engine": "tsx src/main.ts",
     "run:benchmarks": "tsx src/main.ts --benchmarks",
     "run:experiments": "tsx src/main.ts --experiments",
+    "build:c": "cd c-engine && make",
+    "run:c-engine": "cd c-engine && make run",
+    "clean:c": "cd c-engine && make clean",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

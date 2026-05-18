@@ -2,3 +2,6 @@ node_modules/
 dist/
 *.log
 results/charts/
+c-engine/graph_engine
+c-engine/graph_engine.exe
+*.o

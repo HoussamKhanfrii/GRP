@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-18T22:18:19Z",
+  "generatedAt": "2026-05-18T22:28:49Z",
   "users": ["U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8", "U9", "U10", "U11", "U12", "U13", "U14", "U15", "U16", "U17", "U18", "U19", "U20", "U21", "U22", "U23", "U24", "U25", "U26", "U27", "U28", "U29", "U30", "U31", "U32", "U33", "U34", "U35", "U36", "U37", "U38", "U39", "U40"],
   "methods": ["neighborhood", "randomWalkRestart", "spreadingActivation", "weightedInfluence"],
   "graphStats": {
@@ -2574,16 +2574,16 @@
     }
   ],
   "benchmarkResults": [
-    { "method": "neighborhood", "precision": 0.0625000000, "recall": 0.3166666667, "ndcg": 0.3012964829, "runtimeMs": 0.125000, "memoryMB": 0.377678, "visitedNodes": 1027.025, "candidateCount": 438.000 },
-    { "method": "randomWalkRestart", "precision": 0.0625000000, "recall": 0.3166666667, "ndcg": 0.2990435909, "runtimeMs": 2.000000, "memoryMB": 0.377678, "visitedNodes": 1495.000, "candidateCount": 487.300 },
-    { "method": "spreadingActivation", "precision": 0.0650000000, "recall": 0.3291666667, "ndcg": 0.3051813149, "runtimeMs": 0.100000, "memoryMB": 0.377678, "visitedNodes": 1027.025, "candidateCount": 438.000 },
-    { "method": "weightedInfluence", "precision": 0.0600000000, "recall": 0.3083333333, "ndcg": 0.2984551941, "runtimeMs": 2.950000, "memoryMB": 0.377678, "visitedNodes": 1025.925, "candidateCount": 436.900 }
+    { "method": "neighborhood", "precision": 0.0625000000, "recall": 0.3166666667, "ndcg": 0.3012964829, "runtimeMs": 0.100000, "memoryMB": 0.377678, "visitedNodes": 1027.025, "candidateCount": 438.000 },
+    { "method": "randomWalkRestart", "precision": 0.0625000000, "recall": 0.3166666667, "ndcg": 0.2990435909, "runtimeMs": 2.675000, "memoryMB": 0.377678, "visitedNodes": 1495.000, "candidateCount": 487.300 },
+    { "method": "spreadingActivation", "precision": 0.0650000000, "recall": 0.3291666667, "ndcg": 0.3051813149, "runtimeMs": 0.050000, "memoryMB": 0.377678, "visitedNodes": 1027.025, "candidateCount": 438.000 },
+    { "method": "weightedInfluence", "precision": 0.0600000000, "recall": 0.3083333333, "ndcg": 0.2984551941, "runtimeMs": 2.050000, "memoryMB": 0.377678, "visitedNodes": 1025.925, "candidateCount": 436.900 }
   ],
   "graphSizeExperiment": [
-    { "users": 100, "items": 50, "interactions": 500, "latencyMs": 1.000000, "memoryMB": 0.024055, "rankingMs": 0.000000, "candidateCount": 37, "visitedNodes": 81 },
+    { "users": 100, "items": 50, "interactions": 500, "latencyMs": 0.000000, "memoryMB": 0.024055, "rankingMs": 0.000000, "candidateCount": 37, "visitedNodes": 81 },
     { "users": 1000, "items": 500, "interactions": 10000, "latencyMs": 2.000000, "memoryMB": 0.423454, "rankingMs": 0.000000, "candidateCount": 473, "visitedNodes": 1091 },
-    { "users": 5000, "items": 2000, "interactions": 50000, "latencyMs": 22.000000, "memoryMB": 2.098106, "rankingMs": 0.000000, "candidateCount": 1100, "visitedNodes": 1726 },
-    { "users": 10000, "items": 5000, "interactions": 100000, "latencyMs": 44.000000, "memoryMB": 4.234337, "rankingMs": 0.000000, "candidateCount": 1558, "visitedNodes": 2027 }
+    { "users": 5000, "items": 2000, "interactions": 50000, "latencyMs": 15.000000, "memoryMB": 2.098106, "rankingMs": 0.000000, "candidateCount": 1100, "visitedNodes": 1726 },
+    { "users": 10000, "items": 5000, "interactions": 100000, "latencyMs": 32.000000, "memoryMB": 4.234337, "rankingMs": 0.000000, "candidateCount": 1558, "visitedNodes": 2027 }
   ],
   "sparsityExperiment": [
     { "label": "very sparse", "density": 0.001000, "precision": 0.0071428571, "recall": 0.0714285714, "coverage": 0.0680000000, "candidateCount": 2.964 },
@@ -2592,11 +2592,11 @@
     { "label": "dense", "density": 0.050000, "precision": 0.1371428571, "recall": 0.2802721088, "coverage": 0.0440000000, "candidateCount": 479.714 }
   ],
   "depthExperiment": [
-    { "depth": 1, "precision": 0.0000000000, "recall": 0.0000000000, "runtimeMs": 0.000000, "visitedNodes": 8.943, "candidateCount": 0.000 },
+    { "depth": 1, "precision": 0.0000000000, "recall": 0.0000000000, "runtimeMs": 0.057143, "visitedNodes": 8.943, "candidateCount": 0.000 },
     { "depth": 2, "precision": 0.0000000000, "recall": 0.0000000000, "runtimeMs": 0.028571, "visitedNodes": 594.943, "candidateCount": 0.000 },
-    { "depth": 3, "precision": 0.0657142857, "recall": 0.3047619048, "runtimeMs": 0.085714, "visitedNodes": 1036.029, "candidateCount": 441.086 },
+    { "depth": 3, "precision": 0.0657142857, "recall": 0.3047619048, "runtimeMs": 0.114286, "visitedNodes": 1036.029, "candidateCount": 441.086 },
     { "depth": 4, "precision": 0.0657142857, "recall": 0.3047619048, "runtimeMs": 0.171429, "visitedNodes": 1448.971, "candidateCount": 441.086 },
-    { "depth": 5, "precision": 0.0657142857, "recall": 0.3047619048, "runtimeMs": 0.200000, "visitedNodes": 1494.943, "candidateCount": 487.057 }
+    { "depth": 5, "precision": 0.0657142857, "recall": 0.3047619048, "runtimeMs": 0.228571, "visitedNodes": 1494.943, "candidateCount": 487.057 }
   ],
   "degreeImbalanceExperiment": [
     { "distribution": "uniform", "precision": 0.0025000000, "recall": 0.0125000000, "popularItemRatio": 0.2350000000, "diversity": 0.5750000000 },
